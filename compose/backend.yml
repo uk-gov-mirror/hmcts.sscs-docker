@@ -8,10 +8,10 @@ services:
     cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
     restart: on-failure
 
-  sscs-ccd-callback-orchestrator:
-    image: "hmcts/sscs-ccd-callback-orchestrator:${SSCS_CCD_CALLBACK_ORCHESTRATOR_TAG:-latest}"
-    ports:
-      - 8070:8070
+  # sscs-ccd-callback-orchestrator:
+  #   image: "hmcts/sscs-ccd-callback-orchestrator:${SSCS_CCD_CALLBACK_ORCHESTRATOR_TAG:-latest}"
+  #   ports:
+  #     - 8070:8070
 
   ccd-user-profile-api:
     image: "hmcts/ccd-user-profile-api:${CCD_USER_PROFILE_API_TAG:-latest}"
@@ -117,7 +117,7 @@ services:
       IDAM_CCD_ADMIN_WHITELIST: https://localhost:3100/oauth2redirect
       IDAM_SSCS_WHITELIST: https://localhost:3000/authenticated
       NOTIFY: "true"
-      NOTIFY_API_KEY: ${NOTIFICATION_API_KEY}
+      NOTIFY_API_KEY: emailnotificationkey-cf23bf9c-4a42-42d1-a734-5cfc53dda6ca-963572e2-768e-482c-b0de-bf0d2bd79eda
       NOTIFY_SSCS_ACTIVATE_USER_TEMPLATE: f4120f4e-cbd2-45bb-b520-e480ce80a5f4
       NOTIFY_RESET_PASSWORD_TEMPLATE: fake
       NOTIFY_CMC_WELCOME_USER_TEMPLATE: fake
@@ -203,39 +203,39 @@ services:
     healthcheck:
       retries: 40
 
-  stitching-api:
-    image: hmcts.azurecr.io/hmcts/em-stitching:latest
-    healthcheck:
-      interval: 10s
-      timeout: 10s
-      retries: 10
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stitching-db:5432/emstitch
-      - SPRING_DATASOURCE_USERNAME=emstitch
-      - SPRING_DATASOURCE_PASSWORD=emstitch
-      - S2S_BASE_URI=http://service-auth-provider-api:8080
-      - IDAM_API_BASE_URI=http://idam-api:8080
-      - ENABLE_LIQUIBASE=true
-      - APPINSIGHTS_INSTRUMENTATIONKEY=test-key
-      - DM_STORE_APP_URL=http://dm-store:4506
-      - DOCMOSIS_ACCESS_KEY=${DOCMOSIS_ACCESS_KEY}
-      - S2S_NAMES_WHITELIST:jui_webapp,em_ccd_orchestrator,em_gw,sscs
-    depends_on:
-      - stitching-db
-      - dm-store
-    links:
-      - stitching-db
-      - dm-store
-    ports:
-      - 4630:8080
+  # stitching-api:
+  #   image: hmcts.azurecr.io/hmcts/em-stitching:latest
+  #   healthcheck:
+  #     interval: 10s
+  #     timeout: 10s
+  #     retries: 10
+  #   environment:
+  #     - SPRING_DATASOURCE_URL=jdbc:postgresql://stitching-db:5432/emstitch
+  #     - SPRING_DATASOURCE_USERNAME=emstitch
+  #     - SPRING_DATASOURCE_PASSWORD=emstitch
+  #     - S2S_BASE_URI=http://service-auth-provider-api:8080
+  #     - IDAM_API_BASE_URI=http://idam-api:8080
+  #     - ENABLE_LIQUIBASE=true
+  #     - APPINSIGHTS_INSTRUMENTATIONKEY=test-key
+  #     - DM_STORE_APP_URL=http://dm-store:4506
+  #     - DOCMOSIS_ACCESS_KEY=${DOCMOSIS_ACCESS_KEY}
+  #     - S2S_NAMES_WHITELIST:jui_webapp,em_ccd_orchestrator,em_gw,sscs
+  #   depends_on:
+  #     - stitching-db
+  #     - dm-store
+  #   links:
+  #     - stitching-db
+  #     - dm-store
+  #   ports:
+  #     - 4630:8080
 
-  stitching-db:
-    image: postgres
-    restart: always
-    environment:
-      - POSTGRES_DB=emstitch
-      - POSTGRES_USER=emstitch
-      - POSTGRES_PASSWORD=emstitch
+  # stitching-db:
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     - POSTGRES_DB=emstitch
+  #     - POSTGRES_USER=emstitch
+  #     - POSTGRES_PASSWORD=emstitch
 
   rpa-em-ccd-orchestrator:
     image: hmcts.azurecr.io/hmcts/em-ccd-orchestrator:latest
