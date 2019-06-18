@@ -7,7 +7,11 @@
 ##
 ## Returns a valid IDAM user token for the given role and user_id.
 
-ROLE="${1:-ccd-import}"
-USER_ID="${2:-1}"
+source .env
 
-curl --silent http://localhost:5000/testing-support/lease -Fid="${USER_ID}" -Frole="${ROLE}"
+./create-import-user.sh
+
+echo "Getting user_token from idam"
+userToken=$(./idam-authenticate.sh ${IMPORTER_USERNAME} ${IMPORTER_PASSWORD} ${IDAM_URI} ${REDIRECT_URI} ${CLIENT_ID} ${CLIENT_SECRET})
+
+echo "Token: ${userToken}"

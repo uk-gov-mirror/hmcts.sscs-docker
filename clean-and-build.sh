@@ -103,6 +103,8 @@ done
 
 ./bin/document-management-store-create-blob-store-container.sh
 
+./create-import-user.sh
+
 #####################################################################################
 # Create the CCD roles
 #####################################################################################

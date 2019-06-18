@@ -8,6 +8,26 @@ services:
     cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
     restart: on-failure
 
+  sscs-docker-definition-importer:
+    image: "hmcts/sscs-docker-definition-importer:${CCD_DOCKER_DEFINITION_IMPORTER_TAG:-latest}"
+    environment:
+      CCD_DEF_URLS: "https://www.dropbox.com/s/3wvvd8lcse5d8al/CCD_SSCSDefinition_v5.0.1_AAT_1.xlsx"
+      CCD_DEF_FILENAME: ""
+      WAIT_HOSTS: ccd-user-profile-api:4453,ccd-definition-store-api:4451,service-auth-provider-api:8080,ccd-api-gateway:3453,idam-api:5000
+      VERBOSE: "false"
+      CREATE_IMPORTER_USER: "true"
+      IMPORTER_USERNAME: ccd-importer@server.net
+      IMPORTER_PASSWORD: Password12
+      IDAM_URI: http://idam-api:5000
+      REDIRECT_URI: http://localhost:3000/receiver
+      CLIENT_ID: bsp
+      CLIENT_SECRET: 123456
+      USER_ROLES: caseworker-sscs,citizen,caseworker-sscs-systemupdate,caseworker-sscs-anonymouscitizen,caseworker-sscs-callagent,caseworker-sscs-judge,caseworker-sscs-panelmember
+      MICROSERVICE_BASE_URL: http://host.docker.internal:8582
+      AUTH_PROVIDER_BASE_URL: http://service-auth-provider-api:8080
+      MICROSERVICE: ccd_gw
+      CCD_STORE_BASE_URL: http://ccd-definition-store-api:4451
+
   sscs-ccd-callback-orchestrator:
     image: "hmcts/sscs-ccd-callback-orchestrator:${SSCS_CCD_CALLBACK_ORCHESTRATOR_TAG:-latest}"
     ports:
