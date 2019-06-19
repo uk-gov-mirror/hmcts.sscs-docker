@@ -6,6 +6,6 @@
 ##
 ## Returns a valid IDAM service token for the given microservice.
 
-source ../.env
+source .env
 
-curl --fail --silent --show-error -X POST http://localhost:4502/testing-support/lease -d "{\"microservice\":\"ccd_gw\"}" -H 'content-type: application/json'
+curl --fail --silent --show-error -X POST http://localhost:4502/testing-support/lease -d "{\"microservice\":\"sscs\"}" -H 'content-type: application/json'

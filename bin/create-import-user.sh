@@ -2,34 +2,19 @@
 
 set -e
 
-source ../.env
-
-USER_EMAIL="${IMPORTER_USERNAME}"
-PASSWORD="${IMPORTER_PASSWORD}"
-
-FORENAME=CCD
-SURNAME=Importer
-USER_GROUP=ccd-import
+source .env
 
 curl -XPOST -H 'Content-Type: application/json' ${IDAM_URI}/testing-support/accounts -d '{
-    "email": "'${USER_EMAIL}'",
-    "forename": "'${FORENAME}'",
-    "surname": "'${SURNAME}'",
-    "id": "'${CLIENT_ID}'",
+    "email": "${IMPORTER_USERNAME}",
+    "forename": "Ccd",
+    "surname": "Importer",
+    "id": "sscs",
     "levelOfAccess": 0,
     "userGroup": {
-      "code": "'${USER_GROUP}'"
+      "code": "ccd-import"
     },
-    "roles": [{ "code": "ccd-import" }],
+    "roles": [{ "code": "ccd-import" },{"code":"ccd-import-validate"}],
     "activationDate": "",
     "lastAccess": "",
-    "password": "'${PASSWORD}'"
+    "password": "${IMPORTER_PASSWORD}"
 }'
-
-echo "Created user with:"
-echo "Username: ${USER_EMAIL}"
-echo "ID: ${CLIENT_ID}"
-echo "Password:${PASSWORD}"
-echo "Forename: ${FORENAME}"
-echo "Surname: ${SURNAME}"
-echo "User group: ${USER_GROUP}"
