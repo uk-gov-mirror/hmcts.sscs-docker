@@ -24,7 +24,7 @@ services:
       CLIENT_SECRET: 123456
       USER_ROLES: caseworker-sscs,citizen,caseworker-sscs-systemupdate,caseworker-sscs-anonymouscitizen,caseworker-sscs-callagent,caseworker-sscs-judge,caseworker-sscs-panelmember
       MICROSERVICE_BASE_URL: http://host.docker.internal:8582
-      AUTH_PROVIDER_BASE_URL: http://service-auth-provider-api:8080
+      AUTH_PROVIDER_BASE_URL: ${AUTH_PROVIDER_BASE_URL}
       MICROSERVICE: ccd_gw
       CCD_STORE_BASE_URL: http://ccd-definition-store-api:4451
 
@@ -123,7 +123,8 @@ services:
       TESTING_SUPPORT_ENABLED: "true"
       IDAM_TESTING_SUPPORT_ENABLED: "true"
       ENDPOINTS_ENABLED: "true"
-      STRATEGIC_ADMIN_URL: http://idam-web-admin:8080
+      STRATEGIC_ADMIN_URL: "http://idam-web-admin:8080"
+      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_SSCS: "${IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_SSCS}"
     ports:
       - 5000:5000
     depends_on:

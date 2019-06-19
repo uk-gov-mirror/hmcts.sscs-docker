@@ -1,7 +1,7 @@
 #####################################################################################
 # DB_USERNAME and DB_PASSWORD should be set in the .env file
 #####################################################################################
-source .env
+source ../.env
 
 command -v az >/dev/null 2>&1 || {
     echo "################################################################################################"
@@ -22,7 +22,7 @@ else
 fi
 
 echo "Logging into the HMCTS Azure Container Registry"
-./ccd login
+../ccd login
 
 #####################################################################################
 # Get the user's email address
@@ -63,37 +63,37 @@ fi
 #####################################################################################
 # Take down containers and remove volumes
 #####################################################################################
-./ccd compose down -v
+../ccd compose down -v
 
 #####################################################################################
 # Pull the latest images
 #####################################################################################
 rm .tags.env
-./ccd enable frontend backend
+../ccd enable frontend backend
 
 if [ $INCLUDE_DM_STORE == "y" ]; then
-  ./ccd enable dm-store
+  ../ccd enable dm-store
 fi
 
 if [ $INCLUDE_CASE_API == "y" ]; then
-  ./ccd enable case-api
+  ../ccd enable case-api
 fi
 
 if [ $INCLUDE_BULK_SCAN == "y" ]; then
-  ./ccd enable bulk-scan
+  ../ccd enable bulk-scan
 fi
 
-./ccd compose pull
+../ccd compose pull
 
 #####################################################################################
 # Start the containers
 #####################################################################################
-./ccd compose up --build -d
+../ccd compose up --build -d
 
 echo "Starting docker containers..."
-while [ `./ccd compose ps | grep starting | wc -l` != "0" ]
+while [ `../ccd compose ps | grep starting | wc -l` != "0" ]
 do
-    echo "Waiting for " `./ccd compose ps | grep starting | wc -l` " containers to start."
+    echo "Waiting for " `../ccd compose ps | grep starting | wc -l` " containers to start."
     sleep 5
 done
 
@@ -103,7 +103,7 @@ done
 
 ./bin/document-management-store-create-blob-store-container.sh
 
-./create-import-user.sh
+create-import-user.sh
 
 #####################################################################################
 # Create the CCD roles
@@ -115,7 +115,7 @@ ATTEMPTS=0
 for role in "${roles[@]}"
 do
   echo "Creating role $role"
-  until ./bin/ccd-add-role.sh $role
+  until ./ccd-add-role.sh $role
   do
     echo "Failed to create role. This might be ok - trying again in $TRY_AGAIN_SECONDS seconds"
     sleep $TRY_AGAIN_SECONDS

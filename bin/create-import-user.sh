@@ -2,7 +2,7 @@
 
 set -e
 
-source .env
+source ../.env
 
 USER_EMAIL="${IMPORTER_USERNAME}"
 PASSWORD="${IMPORTER_PASSWORD}"
@@ -15,6 +15,7 @@ curl -XPOST -H 'Content-Type: application/json' ${IDAM_URI}/testing-support/acco
     "email": "'${USER_EMAIL}'",
     "forename": "'${FORENAME}'",
     "surname": "'${SURNAME}'",
+    "id": "'${CLIENT_ID}'",
     "levelOfAccess": 0,
     "userGroup": {
       "code": "'${USER_GROUP}'"
@@ -27,6 +28,7 @@ curl -XPOST -H 'Content-Type: application/json' ${IDAM_URI}/testing-support/acco
 
 echo "Created user with:"
 echo "Username: ${USER_EMAIL}"
+echo "ID: ${CLIENT_ID}"
 echo "Password:${PASSWORD}"
 echo "Forename: ${FORENAME}"
 echo "Surname: ${SURNAME}"
