@@ -23,7 +23,7 @@ else
 fi
 
 echo "Logging into the HMCTS Azure Container Registry"
-ccd login
+./ccd login
 
 #####################################################################################
 # Get the user's email address
@@ -64,32 +64,32 @@ fi
 #####################################################################################
 # Take down containers and remove volumes
 #####################################################################################
-ccd compose down -v
+./ccd compose down -v
 
 #####################################################################################
 # Pull the latest images
 #####################################################################################
 rm .tags.env
-ccd enable frontend backend
+./ccd enable frontend backend
 
 if [ $INCLUDE_DM_STORE == "y" ]; then
-  ccd enable dm-store
+  ./ccd enable dm-store
 fi
 
 if [ $INCLUDE_CASE_API == "y" ]; then
-  ccd enable case-api
+  ./ccd enable case-api
 fi
 
 if [ $INCLUDE_BULK_SCAN == "y" ]; then
-  ccd enable bulk-scan
+  ./ccd enable bulk-scan
 fi
 
-ccd compose pull
+./ccd compose pull
 
 #####################################################################################
 # Start the containers
 #####################################################################################
-ccd compose up --build -d
+./ccd compose up --build -d
 
 echo "Starting docker containers..."
 while [ `ccd compose ps | grep starting | wc -l` != "0" ]
@@ -103,8 +103,6 @@ done
 #####################################################################################
 
 ./bin/document-management-store-create-blob-store-container.sh
-
-./bin/create-import-user.sh
 
 IDAM_WEB=http://localhost:8082
 xdg-open ${IDAM_WEB}
@@ -131,7 +129,7 @@ read
 #####################################################################################
 # Create the CCD roles
 #####################################################################################
-roles=("caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-panelmember")
+roles=("ccd-import", "caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-panelmember")
 
 TRY_AGAIN_SECONDS=15
 ATTEMPTS=0
@@ -149,6 +147,8 @@ do
     fi
   done
 done
+
+./bin/create-import-user.sh
 
 #####################################################################################
 # Create a case worker with your email address

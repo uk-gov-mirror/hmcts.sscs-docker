@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source .env
+
 role=$1
 
 if [ -z "$role" ]
@@ -10,8 +12,11 @@ fi
 
 binFolder=$(dirname "$0")
 
-userToken="$(${binFolder}/idam-user-token.sh)"
-serviceToken="$(${binFolder}/idam-service-token.sh)"
+code=$(curl ${CURL_OPTS} -u "${IDAM_USERNAME}:${IDAM_PASSWORD}" -XPOST "${IDAM_URI}/oauth2/authorize?redirect_uri=${REDIRECT_URI}&response_type=code&client_id=${CLIENT_ID}" -d "" | jq -r .code)
+
+userToken=$(curl ${CURL_OPTS} -H "Content-Type: application/x-www-form-urlencoded" -u "${CLIENT_ID}:${CLIENT_SECRET}" -XPOST "${IDAM_URI}/oauth2/token?code=${code}&redirect_uri=${REDIRECT_URI}&grant_type=authorization_code" -d "" | jq -r .access_token)
+
+serviceToken=$(curl --fail --silent --show-error -X POST http://localhost:4502/testing-support/lease -d "{\"microservice\":\"sscs\"}" -H 'content-type: application/json')
 
 echo
 

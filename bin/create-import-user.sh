@@ -4,6 +4,7 @@ set -e
 
 source .env
 
+echo ${IMPORTER_USERNAME}
 curl -XPOST -H 'Content-Type: application/json' ${IDAM_URI}/testing-support/accounts -d '{
     "email": "${IMPORTER_USERNAME}",
     "forename": "Ccd",
@@ -13,7 +14,7 @@ curl -XPOST -H 'Content-Type: application/json' ${IDAM_URI}/testing-support/acco
     "userGroup": {
       "code": "ccd-import"
     },
-    "roles": [{ "code": "ccd-import" },{"code":"ccd-import-validate"}],
+    "roles": [{ "code": "ccd-import" }],
     "activationDate": "",
     "lastAccess": "",
     "password": "${IMPORTER_PASSWORD}"
